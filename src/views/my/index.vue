@@ -4,8 +4,8 @@
     <div v-if="user" class="heard user-info">
       <div class="base-info">
         <div class="left">
-          <van-image src="https://img01.yzcdn.cn/vant/cat.jpeg" round fit="cover" class="avatar" />
-          <span class="name">头条</span>
+          <van-image :src="userinfo.photo" round fit="cover" class="avatar" />
+          <span class="name">{{userinfo.name}}</span>
         </div>
         <div class="right">
           <van-button type="default" round size="mini">编辑资料</van-button>
@@ -13,19 +13,19 @@
       </div>
       <div class="data-stats">
         <div class="data-item">
-          <span class="count">10</span>
+          <span class="count">{{userinfo.art_count}}</span>
           <span class="text">头条</span>
         </div>
         <div class="data-item">
-          <span class="count">10</span>
+          <span class="count">{{userinfo.follow_count}}</span>
           <span class="text">关注</span>
         </div>
         <div class="data-item">
-          <span class="count">10</span>
+          <span class="count">{{userinfo.fans_count}}</span>
           <span class="text">粉丝</span>
         </div>
         <div class="data-item">
-          <span class="count">10</span>
+          <span class="count">{{userinfo.like_count}}</span>
           <span class="text">获赞</span>
         </div>
       </div>
@@ -52,16 +52,56 @@
     </van-grid>
     <van-cell title="消息通知" is-link />
     <van-cell title="小智同学" is-link />
-    <van-cell v-if="user" class="logout-cell" title="退出登录" />
+    <van-cell v-if="user" class="logout-cell" title="退出登录" clickable @click="onlogin" />
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import { getuserinfo } from "@/api/user";
 export default {
   name: "myindex",
+  data() {
+    return {
+      headers: {
+        Authorization: null
+      },
+      userinfo: {}
+    };
+  },
   computed: {
     ...mapState(["user"])
+  },
+  created() {
+    if (this.user) {
+      this.headers.Authorization = `Bearer ${this.user.token}`;
+      this.loginuserinfo();
+    }
+  },
+  methods: {
+    onlogin() {
+      this.$dialog
+        .confirm({
+          title: "确认退出"
+        })
+        .then(() => {
+          this.$store.commit("stateUser", null);
+        })
+        .catch(() => {
+          console.log("取消退出");
+        });
+    },
+    async loginuserinfo() {
+      try {
+        // const { data } = await getuserinfo(this.headers);
+        const { data } = await getuserinfo();
+        this.userinfo = data.data;
+        console.log(data);
+      } catch (e) {
+        this.$toast("获取数据失败,请稍后尝试");
+        console.log(e);
+      }
+    }
   }
 };
 </script>

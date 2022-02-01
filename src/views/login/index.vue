@@ -39,6 +39,10 @@
         <i slot="left-icon" class="iconfont icon-yanzhengma"></i>
         <template #button>
           <van-count-down v-if="ifconunt" :time="1000*10" format="ss s" @finish="ifconunt=false" />
+          <!-- 点击表单中的普通按钮为什么会触发表单提交？
+在表单中，除了提交按钮外，可能还有一些其他的功能性按钮，如发送验证码按钮。
+在使用这些按钮时，要注意将native-type设置为button，否则会触发表单提交。
+          <van-button native-type="button">发送验证码</van-button>-->
           <van-button
             v-else
             class="send"
@@ -85,6 +89,7 @@ export default {
       // 1、获取表单数据
       const user = this.user;
       // 2、表单验证
+
       // 3、提交表单请求登录
       // 在组件中必须通过this.$toast来调用toast组件
       this.$toast.loading({
@@ -98,7 +103,9 @@ export default {
         const res = await login(user);
         console.log("登录成功", res);
         this.$store.commit("stateUser", res.data.data);
-        this.$toast.success("登录成功"); //任何一个toast执行都会替换掉前面的toast
+
+        //任何一个toast执行都会替换掉前面的toast
+        this.$toast.success("登录成功");
 
         //登录成功，跳回原来页面，该方式不严谨，后续性能优化
         this.$router.back();
@@ -108,7 +115,7 @@ export default {
           this.$toast.fail("手机号或者验证码不正确");
         } else {
           console.log("失败", err);
-          this.$toast.fail("失败");
+          this.$toast.fail("登录失败");
         }
       }
       // 根据请求响应结果进行后续操作
@@ -137,17 +144,18 @@ export default {
 <style scoped lang="less">
 .login-contianer {
   .iconfont {
-    font-size: 37px;
+    font-size: 0.37rem;
   }
   .send {
     background: #ededed;
-    width: 152px;
-    height: 46px;
-    line-height: 46px;
-    font-size: 12px;
+    width: 1.52rem;
+    height: 0.46rem;
+    line-height: 0.46rem;
+    font-size: 0.12rem;
+    color: #666;
   }
   .btn {
-    padding: 53px 33px;
+    padding: 0.53rem 0.33rem;
     .btn-b {
       background-color: #6db4fb;
       border: none;

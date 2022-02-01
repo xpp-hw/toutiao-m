@@ -4,21 +4,21 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path: '/',
-    redirect: '/layout'
-  },
+  // {
+  //   path: '/',
+  //   redirect: '/layout'
+  // },
   {
     path: '/login',
     name: 'login',
     component: () => import('@/views/login'),
   },
   {
-    path: '/layout',
+    path: '/',
     // name: 'layout',如果父路由有默认子路由，那么它的name就没有意义
     component: () => import('@/views/layout'),
     children: [{
-      path: '/',//默认子路由，只能有一个
+      path: '',//默认子路由，只能有一个
       name: 'home',
       component: () => import('@/views/home')
     },
