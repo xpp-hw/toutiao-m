@@ -15,6 +15,9 @@ import './styles/index.less'
 // 加载 Vant 全局样式
 import 'vant/lib/index.css';
 
+// 加载dayjs
+import './utils/day'
+
 // 注册使用 Vant 组件库
 Vue.use(Vant);
 
